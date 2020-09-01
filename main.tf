@@ -57,6 +57,8 @@ module gke {
   project_id                 = module.gcp.project_id
   project_id_prefix          = var.project_id_prefix
   master_authorized_networks = var.master_authorized_networks
+  region                     = var.region
+  zone                       = var.zone
 }
 
 
