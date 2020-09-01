@@ -4,20 +4,12 @@
 data "google_client_config" "default" {
 }
 
-data "google_container_cluster" "my_cluster" {
-  project = var.project_id
-  name    = module.private-cluster.name
-  zone    = var.zone
-}
-
 provider "kubernetes" {
   load_config_file = false
 
-  host  = "https://${data.google_container_cluster.my_cluster.endpoint}"
+  host  = "https://${module.private-cluster.endpoint}"
   token = data.google_client_config.default.access_token
-  cluster_ca_certificate = base64decode(
-    data.google_container_cluster.my_cluster.master_auth[0].cluster_ca_certificate,
-  )
+  cluster_ca_certificate = base64decode(module.private-cluster.ca_certificate)
 }
 
 
