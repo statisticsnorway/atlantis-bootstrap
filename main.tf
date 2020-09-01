@@ -76,4 +76,6 @@ module atlantis {
   project_id                 = module.gcp.project_id
   cluster_name               = module.gke.name
   master_authorized_networks = var.master_authorized_networks
+
+  depends_on = [module.gke]
 }
