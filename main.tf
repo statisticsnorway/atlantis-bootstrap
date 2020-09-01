@@ -39,6 +39,21 @@ provider github {
 }
 
 
+#--------------------------------------------------------#
+# Configure Kubernetes provider with OAuth2 access token #
+#--------------------------------------------------------#
+data "google_client_config" "default" {
+}
+
+provider "kubernetes" {
+  load_config_file = false
+
+  host  = "https://${module.gke.endpoint}"
+  token = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
+}
+
+
 module gcp {
   source = "./modules/gcp"
 
@@ -57,6 +72,8 @@ module gke {
   project_id                 = module.gcp.project_id
   project_id_prefix          = var.project_id_prefix
   master_authorized_networks = var.master_authorized_networks
+  region                     = var.region
+  zone                       = var.zone
 }
 
 
@@ -76,4 +93,6 @@ module atlantis {
   project_id                 = module.gcp.project_id
   cluster_name               = module.gke.name
   master_authorized_networks = var.master_authorized_networks
+
+  depends_on = [module.gke]
 }

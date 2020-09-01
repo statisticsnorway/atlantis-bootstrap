@@ -33,6 +33,19 @@ variable "project_id_prefix" {
   description = "Project prefix ID of the Atlantis project."
 }
 
+# GKE variables
+variable "region" {
+  type        = string
+  default     = "europe-north1"
+  description = "Region in which to create the cluster and run Atlantis."
+}
+
+variable "zone" {
+  type        = string
+  default     = "europe-north1-a"
+  description = "GCP zone in which to create the cluster and run Atlantis"
+}
+
 # Azure variables
 variable "azure_subscription_id" {
   type        = string
