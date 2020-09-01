@@ -1,3 +1,18 @@
+#--------------------------------------------------------#
+# Configure Kubernetes provider with OAuth2 access token #
+#--------------------------------------------------------#
+data "google_client_config" "default" {
+}
+
+provider "kubernetes" {
+  load_config_file = false
+
+  host  = "https://${module.private-cluster.endpoint}"
+  token = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(module.private-cluster.ca_certificate)
+}
+
+
 #-------------------------------------------------#
 # Create a VPC network for the Kubernetes cluster #
 #-------------------------------------------------#
