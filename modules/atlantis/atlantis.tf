@@ -4,6 +4,30 @@ locals {
 
 data "github_ip_ranges" "gh" {}
 
+
+#--------------------------------------------------------#
+# Configure Kubernetes provider with OAuth2 access token #
+#--------------------------------------------------------#
+data "google_client_config" "default" {
+}
+
+data "google_container_cluster" "atlantis_cluster" {
+  name = var.cluster_name
+  region = var.region
+  project = var.project_id
+}
+
+provider "kubernetes" {
+  load_config_file = false
+
+  host  = "https://${data.google_container_cluster.atlantis_cluster.endpoint}"
+  token = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(
+    data.google_container_cluster.atlantis_cluster.master_auth[0].cluster_ca_certificate,
+  )
+}
+
+
 #-----------------------------------------#
 # Create a Workload Identity for Atlantis #
 #-----------------------------------------#
