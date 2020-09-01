@@ -19,7 +19,7 @@ provider "kubernetes" {
 module "kubernetes-engine_workload-identity" {
   source       = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
   version      = "~> 10.0"
-  cluster_name = var.cluster_name
+  cluster_name = module.private-cluster.name
   name         = "atlantis"
   namespace    = "default"
   project_id   = var.project_id
