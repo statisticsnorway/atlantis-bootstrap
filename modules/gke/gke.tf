@@ -13,6 +13,19 @@ provider "kubernetes" {
 }
 
 
+#-----------------------------------------#
+# Create a Workload Identity for Atlantis #
+#-----------------------------------------#
+module "kubernetes-engine_workload-identity" {
+  source       = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
+  version      = "~> 10.0"
+  cluster_name = var.cluster_name
+  name         = "atlantis"
+  namespace    = "default"
+  project_id   = var.project_id
+}
+
+
 #-------------------------------------------------#
 # Create a VPC network for the Kubernetes cluster #
 #-------------------------------------------------#
